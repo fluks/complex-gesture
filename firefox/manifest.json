@@ -1,0 +1,37 @@
+{
+    "manifest_version": 2,
+    "name": "Complex Gesture",
+    "version": "0.1.0",
+    "description": "Gesture addon mainly meant for touch input.",
+    "author": "fluks",
+
+    "applications": {
+        "gecko": {
+            "id": "complexgesture@fluks"
+        }
+    },
+
+    "background": {
+        "page": "background/background.html"
+    },
+
+    "options_ui": {
+        "page": "options/options.html",
+        "open_in_tab": true
+    },
+
+    "content_scripts": [
+        {
+            "matches": [ "*://*/*" ],
+            "js": [
+                "content_script/content.js"
+            ]
+        }
+    ],
+
+    "permissions": [
+        "storage",
+        "tabs",
+        "<all_urls>"
+    ]
+}

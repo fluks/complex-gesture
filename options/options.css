@@ -1,0 +1,32 @@
+body {
+  text-align: center;
+}
+
+#gesture-background {
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-color: rgba(215, 216, 212, 0.5);
+  z-index: 2;
+}
+
+#ok {
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+#gesture-area {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  margin-left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+canvas {
+  border: solid black 1px;
+  background-color: white;
+}
