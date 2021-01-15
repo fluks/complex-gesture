@@ -85,13 +85,13 @@ function Rectangle(x, y, width, height) // constructor
 //
 // Unistroke class: a unistroke template
 //
-function Unistroke(name, points) // constructor
+function Unistroke(name, points, squareSize) // constructor
 {
 	this.Name = name;
 	this.Points = Resample(points, NumPoints);
 	var radians = IndicativeAngle(this.Points);
 	this.Points = RotateBy(this.Points, -radians);
-	this.Points = ScaleTo(this.Points, SquareSize);
+	this.Points = ScaleTo(this.Points, squareSize);
 	this.Points = TranslateTo(this.Points, Origin);
 	this.Vector = Vectorize(this.Points); // for Protractor
 }
@@ -109,10 +109,7 @@ function Result(name, score, ms) // constructor
 //
 const NumPoints = 64;
 // TODO Change this?
-const SquareSize = 250.0;
 const Origin = new Point(0,0);
-const Diagonal = Math.sqrt(SquareSize * SquareSize + SquareSize * SquareSize);
-const HalfDiagonal = 0.5 * Diagonal;
 const AngleRange = Deg2Rad(45.0);
 const AnglePrecision = Deg2Rad(2.0);
 const Phi = 0.5 * (-1.0 + Math.sqrt(5.0)); // Golden Ratio
@@ -125,7 +122,7 @@ function DollarRecognizer() // constructor
 	//
 	// The $1 Gesture Recognizer API begins here -- 3 methods: Recognize(), AddGesture(), and DeleteUserGestures()
 	//
-	this.Recognize = function(points, useProtractor)
+	this.Recognize = function(points, useProtractor, squareSize)
 	{
 		var t0 = Date.now();
 		points = Resample(points, NumPoints);
@@ -149,12 +146,14 @@ function DollarRecognizer() // constructor
 				u = i; // unistroke index
 			}
 		}
+        const Diagonal = Math.sqrt(squareSize * squareSize + squareSize * squareSize);
+        const HalfDiagonal = 0.5 * Diagonal;
 		var t1 = Date.now();
 		return (u == -1) ? new Result("No match.", 0.0, t1-t0) : new Result(this.Unistrokes[u].Name, useProtractor ? 1.0 / b : 1.0 - b / HalfDiagonal, t1-t0);
 	}
-	this.AddGesture = function(name, points)
+	this.AddGesture = function(name, points, squareSize)
 	{
-		this.Unistrokes[this.Unistrokes.length] = new Unistroke(name, points); // append new unistroke
+		this.Unistrokes[this.Unistrokes.length] = new Unistroke(name, points, squareSize); // append new unistroke
 		var num = 0;
 		for (var i = 0; i < this.Unistrokes.length; i++) {
 			if (this.Unistrokes[i].Name == name)
