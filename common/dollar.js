@@ -108,7 +108,6 @@ function Result(name, score, ms) // constructor
 // DollarRecognizer constants
 //
 const NumPoints = 64;
-// TODO Change this?
 const Origin = new Point(0,0);
 const AngleRange = Deg2Rad(45.0);
 const AnglePrecision = Deg2Rad(2.0);
@@ -128,7 +127,7 @@ function DollarRecognizer() // constructor
 		points = Resample(points, NumPoints);
 		var radians = IndicativeAngle(points);
 		points = RotateBy(points, -radians);
-		points = ScaleTo(points, SquareSize);
+		points = ScaleTo(points, squareSize);
 		points = TranslateTo(points, Origin);
 		var vector = Vectorize(points); // for Protractor
 
