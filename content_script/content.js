@@ -33,10 +33,8 @@ function stopGesture(e) {
     g_points.push(new Point(x, y));
     chrome.runtime.sendMessage({
         points: g_points,
-        screen: {
-            x: document.body.clientWidth,
-            y: document.body.clientHeight,
-        },
+        x: document.body.clientWidth,
+        y: document.body.clientHeight,
     });
 }
 
