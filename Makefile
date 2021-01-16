@@ -39,13 +39,14 @@ run:
 		--pref intl.locale.requested=en \
 		-u 'about:devtools-toolbox?id=complexgesture%40fluks&type=extension' \
 		-u 'about:debugging#/runtime/this-firefox' \
-		-u about:addons
+		-u about:addons \
+		-u https://www.wikipedia.org/
 
 firefox: change_to_firefox
-	zip -r redirect_link-$(version_suffix).xpi $(firefox_files)
+	zip -r complex_gesture-$(version_suffix).xpi $(firefox_files)
 
 chromium: change_to_chromium
-	zip redirect_link-$(version_suffix).zip $(chromium_files)
+	zip complex_gesture-$(version_suffix).zip $(chromium_files)
 
 change_to_firefox:
 	cp firefox/manifest.json .
