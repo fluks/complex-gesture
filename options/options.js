@@ -31,9 +31,16 @@ function init(options) {
         g_options.actions[g_name].points = g_points;
     });
     document.querySelector('#custom').addEventListener('click', () => addGesture('Custom action', true));
-    g_canvas.addEventListener('mousedown', startGesture);
-    g_canvas.addEventListener('mousemove', move);
-    g_canvas.addEventListener('mouseup', stopGesture);
+    if ('ontouchstart' in window) {
+        g_canvas.addEventListener('touchstart', startGesture);
+        g_canvas.addEventListener('touchmove', move);
+        g_canvas.addEventListener('touchend', stopGesture);
+    }
+    else {
+        g_canvas.addEventListener('mousedown', startGesture);
+        g_canvas.addEventListener('mousemove', move);
+        g_canvas.addEventListener('mouseup', stopGesture);
+    }
     document.addEventListener('blur', save);
 
     g_minScore.value = g_options.minScore;
@@ -80,6 +87,7 @@ function startGesture(e) {
     clearCanvas();
     g_isDown = true;
     g_points = [];
+    e = e.touches ? e.touches[0] : e;
     const x = e.layerX;
     const y = e.layerY;
     g_points.push(new Point(x, y));
@@ -97,6 +105,7 @@ function move(e) {
     if (!g_isDown)
         return;
 
+    e = e.touches ? e.touches[0] : e;
     const x = e.layerX;
     const y = e.layerY;
     g_points.push(new Point(x, y));
@@ -105,6 +114,7 @@ function move(e) {
 
 function stopGesture(e) {
     g_isDown = false;
+    e = e.touches ? e.touches[0] : e;
     const x = e.layerX;
     const y = e.layerY;
     g_points.push(new Point(x, y));
