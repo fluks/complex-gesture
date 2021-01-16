@@ -13,11 +13,6 @@ body {
   z-index: 2;
 }
 
-#ok {
-  margin-left: 50%;
-  transform: translateX(-50%);
-}
-
 #gesture-area {
   position: absolute;
   z-index: 2;
