@@ -10,52 +10,98 @@ function setOptions(details) {
                 'Previous tab': {
                     custom: false,
                     points: [],
-                    code: '',
+                    code: {
+                        background: `
+                            const indexActive = sender.tab.index;
+                            chrome.tabs.query({ index: indexActive - 1, }, tabs => {
+                                chrome.tabs.update(tabs[0].id, { active: true, });
+                            });
+                        `,
+                        content: '',
+                    },
                 },
                 'Next tab': {
                     custom: false,
                     points: [],
-                    code: '',
+                    code: {
+                        background: `
+                            const indexActive = sender.tab.index;
+                            chrome.tabs.query({ index: indexActive + 1, }, tabs => {
+                                chrome.tabs.update(tabs[0].id, { active: true, });
+                            });
+                        `,
+                        content: '',
+                    },
                 },
                 'Previous page': {
                     custom: false,
                     points: [],
-                    code: '',
+                    code: {
+                        background: 'chrome.tabs.goBack();',
+                        content: '',
+                    },
                 },
                 'Next page': {
                     custom: false,
                     points: [],
-                    code: '',
+                    code: {
+                        background: 'chrome.tabs.goForward();',
+                        content: '',
+                    },
                 },
                 'Open new tab': {
                     custom: false,
                     points: [],
-                    code: '',
+                    code: {
+                        background: `
+                            const indexActive = sender.tab.index;
+                            chrome.tabs.create({ index: indexActive + 1, });
+                        `,
+                        content: '',
+                    },
                 },
                 'Close current tab': {
                     custom: false,
                     points: [],
-                    code: '',
+                    code: {
+                        background: `
+                            const id = sender.tab.id;
+                            chrome.tabs.remove(id);
+                        `,
+                        content: '',
+                    },
                 },
                 'Reload current tab': {
                     custom: false,
                     points: [],
-                    code: '',
+                    code: {
+                        background: 'chrome.tabs.reload();',
+                        content: '',
+                    },
                 },
                 'Bookmark tab': {
                     custom: false,
                     points: [],
-                    code: '',
+                    code: {
+                        background: '',
+                        content: '',
+                    },
                 },
                 'Scroll to top': {
                     custom: false,
                     points: [],
-                    code: '',
+                    code: {
+                        background: '',
+                        content: 'window.scrollTo(0, 0);',
+                    },
                 },
                 'Scroll to bottom': {
                     custom: false,
                     points: [],
-                    code: '',
+                    code: {
+                        background: '',
+                        content: 'window.scrollTo(0, document.body.scrollHeight);',
+                    },
                 },
             },
         };
