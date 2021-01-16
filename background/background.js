@@ -1,5 +1,4 @@
-let g_options = {},
-    dollar = DollarRecognizer();
+let dollar = new DollarRecognizer();
 
 function setOptions(details) {
     if (details.reason === 'install') {
@@ -128,13 +127,16 @@ function gestureListener(req, sender, sendResponse) {
     });
 }
 
-function(changes, area) {
-    const o = chrome.storage.local.get(null);
-    o.then(options => {
-        dollar = DollarRecognizer();
+function optionsChanged(changes, area) {
+    // Canvas in options is 400.
+    const squareSize = 400;
+    chrome.storage.local.get(null, options => {
+        dollar = new DollarRecognizer();
         Object.keys(options.actions).forEach(k => {
-            dollar.addGesture(k, options.actions[k].points);
-        })
+            if (options.actions[k].points.length > 0) {
+                dollar.AddGesture(k, options.actions[k].points, squareSize);
+            }
+        });
     });
 }
 
