@@ -3,7 +3,9 @@ let g_options = {},
 
 function setOptions(details) {
     if (details.reason === 'install') {
-        g_options = {
+        const options = {
+            useProtractor: false,
+            minScore: 0.5,
             actions: {
                 'Previous tab': {
                     custom: false,
@@ -57,19 +59,27 @@ function setOptions(details) {
                 },
             },
         };
-        chrome.storage.local.set(g_options);
+        chrome.storage.local.set(options);
     }
     else if (details.reason === 'update') {
     }
 }
 
 function gestureListener(req, sender, sendResponse) {
-    const useProtractor = false;
-    const r = dollar.recognize(req.points, useProtractor);
-    console.log(r.Name, r.Score);
-    if (r.Score >= minScore) {
-        eval(g_options.actions[r.Name].code);
-    }
+    const squareSize = req.x > req.y ? req.x : req.y;
+    chrome.storage.local.get(null, options => {
+        const r = dollar.Recognize(req.points, options.useProtractor, squareSize);
+        console.log(r.Name, r.Score);
+        if (r.Score >= options.minScore) {
+            if (options.actions[r.Name].code.background)
+                eval(options.actions[r.Name].code.background);
+            else {
+                chrome.tabs.query({ active: true, }, tabs => {
+                    chrome.tabs.sendMessage(tabs[0].id, { code: options.actions[r.Name].code.content, });
+                });
+            }
+        }
+    });
 }
 
 function(changes, area) {

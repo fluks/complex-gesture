@@ -1,5 +1,6 @@
 const g_gestureBackground = document.querySelector('#gesture-background'),
-    g_canvas = document.querySelector('canvas');
+    g_canvas = document.querySelector('canvas'),
+    g_minScore = document.querySelector('#min-score');
 
 const g_rect = g_canvas.getBoundingClientRect(),
     g_ctx = g_canvas.getContext('2d');
@@ -34,6 +35,8 @@ function init(options) {
     g_canvas.addEventListener('mousemove', move);
     g_canvas.addEventListener('mouseup', stopGesture);
     document.addEventListener('blur', save);
+
+    g_minScore.value = g_options.minScore;
 }
 
 function clearGesture(e) {
@@ -119,6 +122,9 @@ function save(e) {
         .forEach(n => {
             g_options.actions[n].custom = true;
         });
+
+    g_options.minScore = g_minScore.value;
+
     chrome.storage.local.set(g_options);
 }
 
