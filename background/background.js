@@ -9,98 +9,42 @@ function setOptions(details) {
                 'Previous tab': {
                     custom: false,
                     points: [],
-                    code: {
-                        background: `
-                            const indexActive = sender.tab.index;
-                            chrome.tabs.query({ index: indexActive - 1, }, tabs => {
-                                chrome.tabs.update(tabs[0].id, { active: true, });
-                            });
-                        `,
-                        content: '',
-                    },
                 },
                 'Next tab': {
                     custom: false,
                     points: [],
-                    code: {
-                        background: `
-                            const indexActive = sender.tab.index;
-                            chrome.tabs.query({ index: indexActive + 1, }, tabs => {
-                                chrome.tabs.update(tabs[0].id, { active: true, });
-                            });
-                        `,
-                        content: '',
-                    },
                 },
                 'Previous page': {
                     custom: false,
                     points: [],
-                    code: {
-                        background: 'chrome.tabs.goBack();',
-                        content: '',
-                    },
                 },
                 'Next page': {
                     custom: false,
                     points: [],
-                    code: {
-                        background: 'chrome.tabs.goForward();',
-                        content: '',
-                    },
                 },
                 'Open new tab': {
                     custom: false,
                     points: [],
-                    code: {
-                        background: `
-                            const indexActive = sender.tab.index;
-                            chrome.tabs.create({ index: indexActive + 1, });
-                        `,
-                        content: '',
-                    },
                 },
                 'Close current tab': {
                     custom: false,
                     points: [],
-                    code: {
-                        background: `
-                            const id = sender.tab.id;
-                            chrome.tabs.remove(id);
-                        `,
-                        content: '',
-                    },
                 },
                 'Reload current tab': {
                     custom: false,
                     points: [],
-                    code: {
-                        background: 'chrome.tabs.reload();',
-                        content: '',
-                    },
                 },
                 'Bookmark tab': {
                     custom: false,
                     points: [],
-                    code: {
-                        background: '',
-                        content: '',
-                    },
                 },
                 'Scroll to top': {
                     custom: false,
                     points: [],
-                    code: {
-                        background: '',
-                        content: 'window.scrollTo(0, 0);',
-                    },
                 },
                 'Scroll to bottom': {
                     custom: false,
                     points: [],
-                    code: {
-                        background: '',
-                        content: 'window.scrollTo(0, document.body.scrollHeight);',
-                    },
                 },
             },
         };
@@ -144,11 +88,45 @@ function gestureListener(req, sender, sendResponse) {
         const r = dollar.Recognize(points, options.useProtractor, squareSize);
         console.log(r.Name, r.Score);
         if (r.Score >= options.minScore) {
-            if (options.actions[r.Name].code.background)
-                eval(options.actions[r.Name].code.background);
-            else {
+            if (r.Name === 'Previous tab') {
+                const indexActive = sender.tab.index;
+                chrome.tabs.query({ index: indexActive - 1, }, tabs => {
+                    chrome.tabs.update(tabs[0].id, { active: true, });
+                });
+            }
+            else if (r.Name === 'Next tab') {
+                const indexActive = sender.tab.index;
+                chrome.tabs.query({ index: indexActive + 1, }, tabs => {
+                    chrome.tabs.update(tabs[0].id, { active: true, });
+                });
+            }
+            else if (r.Name === 'Previous page') {
+                chrome.tabs.goBack();
+            }
+            else if (r.Name === 'Next page') {
+                chrome.tabs.goForward();
+            }
+            else if (r.Name === 'Open new tab') {
+                const indexActive = sender.tab.index;
+                chrome.tabs.create({ index: indexActive + 1, });
+            }
+            else if (r.Name === 'Close current tab') {
+                const id = sender.tab.id;
+                chrome.tabs.remove(id);
+            }
+            else if (r.Name === 'Reload current tab') {
+                chrome.tabs.reload();
+            }
+            else if (r.Name === 'Bookmark tab') {
+            }
+            else if (r.Name === 'Scroll to top') {
                 chrome.tabs.query({ active: true, }, tabs => {
-                    chrome.tabs.sendMessage(tabs[0].id, { code: options.actions[r.Name].code.content, });
+                    chrome.tabs.sendMessage(tabs[0].id, { action: 'Scroll to top', });
+                });
+            }
+            else if (r.Name === 'Scroll to bottom') {
+                chrome.tabs.query({ active: true, }, tabs => {
+                    chrome.tabs.sendMessage(tabs[0].id, { action: 'Scroll to bottom', });
                 });
             }
         }

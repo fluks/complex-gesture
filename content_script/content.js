@@ -39,7 +39,12 @@ function stopGesture(e) {
 }
 
 function doAction(req, sender, sendMessage) {
-    eval(req.code);
+    if (req.action === 'Scroll to top') {
+         window.scrollTo(0, 0);
+    }
+    else if (req.action === 'Scroll to bottom') {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
     return true;
 }
 
