@@ -7,43 +7,33 @@ function setOptions(details) {
             minScore: 0.5,
             actions: {
                 'Previous tab': {
-                    custom: false,
                     points: [],
                 },
                 'Next tab': {
-                    custom: false,
                     points: [],
                 },
                 'Previous page': {
-                    custom: false,
                     points: [],
                 },
                 'Next page': {
-                    custom: false,
                     points: [],
                 },
                 'Open new tab': {
-                    custom: false,
                     points: [],
                 },
                 'Close current tab': {
-                    custom: false,
                     points: [],
                 },
                 'Reload current tab': {
-                    custom: false,
                     points: [],
                 },
                 'Bookmark tab': {
-                    custom: false,
                     points: [],
                 },
                 'Scroll to top': {
-                    custom: false,
                     points: [],
                 },
                 'Scroll to bottom': {
-                    custom: false,
                     points: [],
                 },
             },

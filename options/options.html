@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="options.css">
   </head>
   <body>
-    <div id="actions">
-      <h1>Actions</h1>
-    </div>
-    <button id="custom">Add custom action</button>
+    <h1>Actions</h1>
+    <div id="actions"></div>
     <h1>Configurations</h1>
-    <label for="min-score">Minimum probability to recognize a gesture</label><input id="min-score" type="number" min="0" max="1" step="0.1" size="3">
+    <div id="configurations">
+      <label for="min-score">Minimum probability to recognize a gesture</label><input id="min-score" type="number" min="0" max="1" step="0.1" size="3">
+    </div>
     <div id="gesture-background">
       <div id="gesture-area" class="center">
         <canvas width="400" height="400"></canvas>

@@ -25,3 +25,19 @@ canvas {
   border: solid black 1px;
   background-color: white;
 }
+
+#actions {
+  display: grid;
+  grid-template-columns: max-content min-content min-content;
+  column-gap: 10px;
+  row-gap: 10px;
+  justify-content: center;
+}
+
+#configurations {
+  display: grid;
+  grid-template-columns: max-content min-content;
+  column-gap: 10px;
+  row-gap: 10px;
+  justify-content: center;
+}

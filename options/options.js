@@ -10,13 +10,12 @@ const g_rect = g_canvas.getBoundingClientRect(),
 let g_isDown = false,
     g_points = [],
     g_name = '',
-    g_options = {},
-    g_useProtractor = false;
+    g_options = {};
 
 function init(options) {
     g_options = options;
-    Object.keys(g_options.actions).forEach(name => {
-        addGesture(name, g_options.actions[name].custom);
+    Object.keys(g_options.actions).forEach((name, i) => {
+        addGesture(name, i);
     });
 
     document.querySelectorAll('.clear').forEach(e => {
@@ -30,7 +29,6 @@ function init(options) {
         g_gestureBackground.style.display = 'none';
         g_options.actions[g_name].points = g_points;
     });
-    document.querySelector('#custom').addEventListener('click', () => addGesture('Custom action', true));
     if ('ontouchstart' in window) {
         g_canvas.addEventListener('touchstart', startGesture);
         g_canvas.addEventListener('touchmove', move);
@@ -46,36 +44,53 @@ function init(options) {
     g_minScore.value = g_options.minScore;
 }
 
+function getRow(e) {
+    for (let c of e.classList.entries()) {
+        if (c[1].startsWith('row'))
+            return c[1];
+    }
+}
+
 function clearGesture(e) {
-    const name = e.parentNode.querySelector('.name').value;
+    const row = getRow(e);
+    const name = document.querySelector(`.name.${row}`).textContent;
     g_options.actions[name].points = [];
 }
 
 function showGestureArea(e) {
     g_gestureBackground.style.display = 'inherit';
 
-    g_name = e.parentNode.querySelector('.name').value;
+    const row = getRow(e);
+    g_name = document.querySelector(`.name.${row}`).textContent;
     g_points = g_options.actions[g_name].points;
     for (let i = 2; i < g_points.length; i++) {
         drawLine(i - 2, i - 1);
     }
 }
 
-function addGesture(name, isCustom) {
-    const disabled = isCustom ? '' : 'disabled';
-    const remove = isCustom ? '<input type="button" value="Remove" class="remove">' : '';
-    const div = document.createElement('div');
-    div.classList = 'action';
-    const html = `    
-        <input class="name" value="${name}" ${disabled}>
-        <input type="button" value="Gesture" class="gesture">
-        <input type="button" value="Clear" class="clear">
-        ${remove}
-    `;
-    div.innerHTML = html;
-    document.querySelector('#actions').appendChild(div);
-    if (isCustom)
-        div.querySelector('.remove').addEventListener('click', () => div.remove());
+function addGesture(name, i) {
+    const actions = document.querySelector('#actions');
+    const row = 'row-' + i;
+
+    const nameSpan = document.createElement('span');
+    nameSpan.classList.add('name');
+    nameSpan.classList.add(row);
+    nameSpan.textContent = name;
+    actions.appendChild(nameSpan);
+
+    const gesture = document.createElement('input');
+    gesture.type = 'button';
+    gesture.classList.add('gesture');
+    gesture.classList.add(row);
+    gesture.value = 'Gesture';
+    actions.appendChild(gesture);
+
+    const clear = document.createElement('input');
+    clear.type = 'button';
+    clear.classList.add('clear');
+    clear.classList.add(row);
+    clear.value = 'Clear';
+    actions.appendChild(clear);
 }
 
 function Point(x, y) {
@@ -127,12 +142,6 @@ function clearCanvas() {
 }
 
 function save(e) {
-    Array.from(document.querySelectorAll('.name'))
-        .filter(n => !n.disabled)
-        .forEach(n => {
-            g_options.actions[n].custom = true;
-        });
-
     g_options.minScore = g_minScore.value;
 
     chrome.storage.local.set(g_options);
