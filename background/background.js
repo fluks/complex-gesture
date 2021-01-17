@@ -110,10 +110,38 @@ function setOptions(details) {
     }
 }
 
+function getSquareSizeAndMapPoints(points) {
+    let left = null, right = null, top = null, bottom = null;
+    points.forEach(p => {
+        if (left === null || p.X < left)
+            left = p.X;
+        if (right === null || p.X > right)
+            right = p.X;
+        if (top === null || p.Y < top)
+            top = p.Y;
+        if (bottom === null || p.Y > bottom)
+            bottom = p.Y;
+    });
+
+    // Make box square.
+    if (bottom - top > right - left)
+        right += (bottom - top) - (right - left);
+    else
+        bottom += (right - left) - (bottom - top);
+    const squareSize = bottom - top;
+
+    // Map points to the new square.
+    points = points.map(p => {
+        return new Point(p.X - left, p.Y - top);
+    });
+
+    return [ points, squareSize ]
+}
+
 function gestureListener(req, sender, sendResponse) {
-    const squareSize = req.x > req.y ? req.x : req.y;
+    const [ points, squareSize ] = getSquareSizeAndMapPoints(req.points);
     chrome.storage.local.get(null, options => {
-        const r = dollar.Recognize(req.points, options.useProtractor, squareSize);
+        const r = dollar.Recognize(points, options.useProtractor, squareSize);
         console.log(r.Name, r.Score);
         if (r.Score >= options.minScore) {
             if (options.actions[r.Name].code.background)
