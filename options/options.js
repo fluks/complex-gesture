@@ -99,12 +99,22 @@ function Point(x, y) {
 }
 
 function startGesture(e) {
+    e.preventDefault();
     clearCanvas();
     g_isDown = true;
     g_points = [];
-    e = e.touches ? e.touches[0] : e;
-    const x = e.layerX;
-    const y = e.layerY;
+
+    let x, y;
+    if (e.touches) {
+        e = e.touches[0];
+        const rect = e.target.getBoundingClientRect();
+        x = e.pageX - rect.x;
+        y = e.pageY - rect.y;
+    }
+    else {
+        x = e.layerX;
+        y = e.layerY;
+    }
     g_points.push(new Point(x, y));
 }
 
@@ -120,18 +130,35 @@ function move(e) {
     if (!g_isDown)
         return;
 
-    e = e.touches ? e.touches[0] : e;
-    const x = e.layerX;
-    const y = e.layerY;
+    let x, y;
+    if (e.touches) {
+        e = e.touches[0];
+        const rect = e.target.getBoundingClientRect();
+        x = e.pageX - rect.x;
+        y = e.pageY - rect.y;
+    }
+    else {
+        x = e.layerX;
+        y = e.layerY;
+    }
     g_points.push(new Point(x, y));
     drawLine(g_points.length - 2, g_points.length - 1);
 }
 
 function stopGesture(e) {
     g_isDown = false;
-    e = e.touches ? e.touches[0] : e;
-    const x = e.layerX;
-    const y = e.layerY;
+
+    let x, y;
+    if (e.touches) {
+        e = e.touches[0];
+        const rect = e.target.getBoundingClientRect();
+        x = e.pageX - rect.x;
+        y = e.pageY - rect.y;
+    }
+    else {
+        x = e.layerX;
+        y = e.layerY;
+    }
     g_points.push(new Point(x, y));
     drawLine(g_points.length - 2, g_points.length - 1);
 }
