@@ -30,7 +30,7 @@ version_suffix := $(shell grep -o '[0-9]\.[0-9]\.[0-9]' manifest.json | head -1 
 
 .PHONY: run firefox chromium clean change_to_firefox change_to_chromium lint \
 	doc show_doc supported_versions compare_install_and_source 				 \
-	install_dependencies test
+	install_dependencies test run_android
 
 run:
 	web-ext run \
@@ -41,6 +41,9 @@ run:
 		-u 'about:debugging#/runtime/this-firefox' \
 		-u about:addons \
 		-u https://www.wikipedia.org/
+
+run_android:
+	web-ext run -t firefox-android --adb-device $(shell adb devices | sed '2p; d' | cut -f 1) --firefox-apk org.mozilla.fenix
 
 firefox: change_to_firefox
 	zip -r complex_gesture-$(version_suffix).xpi $(firefox_files)
