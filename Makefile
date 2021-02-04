@@ -34,6 +34,7 @@ version_suffix := $(shell grep -o '[0-9]\.[0-9]\.[0-9]' manifest.json | head -1 
 
 run:
 	web-ext run \
+		--verbose \
 		--firefox-binary $(firefox-bin) \
 		--firefox-profile $(ff-profile) \
 		--pref intl.locale.requested=en \
@@ -43,7 +44,11 @@ run:
 		-u https://www.wikipedia.org/
 
 run_android:
-	web-ext run -t firefox-android --adb-device $(shell adb devices | sed '2p; d' | cut -f 1) --firefox-apk org.mozilla.fenix
+	web-ext run \
+		-t firefox-android \
+		--adb-device $(shell adb devices | sed '2p; d' | cut -f 1) \
+		--firefox-apk org.mozilla.fenix \
+		--verbose
 
 firefox: change_to_firefox
 	zip -r complex_gesture-$(version_suffix).xpi $(firefox_files)
