@@ -24,6 +24,7 @@
         {
             "matches": [ "*://*/*" ],
             "js": [
+                "common/common.js",
                 "content_script/content.js"
             ]
         }

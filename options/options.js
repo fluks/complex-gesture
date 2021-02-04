@@ -2,8 +2,7 @@ const g_gestureBackground = document.querySelector('#gesture-background'),
     g_canvas = document.querySelector('canvas'),
     g_minScore = document.querySelector('#min-score');
 
-const g_rect = g_canvas.getBoundingClientRect(),
-    g_ctx = g_canvas.getContext('2d');
+const g_ctx = g_canvas.getContext('2d');
     g_ctx.fillStyle = 'rgb(0,0,225)';
     g_ctx.strokeStyle = 'rgb(0,0,225)';
     g_ctx.lineWidth = 3;
@@ -93,28 +92,13 @@ function addGesture(name, i) {
     actions.appendChild(clear);
 }
 
-function Point(x, y) {
-    this.X = x;
-    this.Y = y;
-}
-
 function startGesture(e) {
     e.preventDefault();
     clearCanvas();
     g_isDown = true;
     g_points = [];
 
-    let x, y;
-    if (e.touches) {
-        e = e.touches[0];
-        const rect = e.target.getBoundingClientRect();
-        x = e.pageX - rect.x;
-        y = e.pageY - rect.y;
-    }
-    else {
-        x = e.layerX;
-        y = e.layerY;
-    }
+    const [ x, y ] = getXY(e);
     g_points.push(new Point(x, y));
 }
 
@@ -130,17 +114,7 @@ function move(e) {
     if (!g_isDown)
         return;
 
-    let x, y;
-    if (e.touches) {
-        e = e.touches[0];
-        const rect = e.target.getBoundingClientRect();
-        x = e.pageX - rect.x;
-        y = e.pageY - rect.y;
-    }
-    else {
-        x = e.layerX;
-        y = e.layerY;
-    }
+    const [ x, y ] = getXY(e);
     g_points.push(new Point(x, y));
     drawLine(g_points.length - 2, g_points.length - 1);
 }
@@ -148,24 +122,14 @@ function move(e) {
 function stopGesture(e) {
     g_isDown = false;
 
-    let x, y;
-    if (e.touches) {
-        e = e.touches[0];
-        const rect = e.target.getBoundingClientRect();
-        x = e.pageX - rect.x;
-        y = e.pageY - rect.y;
-    }
-    else {
-        x = e.layerX;
-        y = e.layerY;
-    }
+    const [ x, y ] = getXY(e);
     g_points.push(new Point(x, y));
     drawLine(g_points.length - 2, g_points.length - 1);
 }
 
 function clearCanvas() {
-    const g_rect = g_canvas.getBoundingClientRect();
-    g_ctx.clearRect(0, 0, g_rect.width, g_rect.height);
+    const rect = g_canvas.getBoundingClientRect();
+    g_ctx.clearRect(0, 0, rect.width, rect.height);
 }
 
 function save(e) {

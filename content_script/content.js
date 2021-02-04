@@ -1,27 +1,12 @@
 let g_isDown = false,
     g_points = [];
 
-function Point(x, y) {
-    this.X = x;
-    this.Y = y;
-}
-
 function startGesture(e) {
     e.preventDefault();
     g_isDown = true;
     g_points = [];
 
-    let x, y;
-    if (e.touches) {
-        e = e.touches[0];
-        const rect = e.target.getBoundingClientRect();
-        x = e.pageX - rect.x;
-        y = e.pageY - rect.y;
-    }
-    else {
-        x = e.layerX;
-        y = e.layerY;
-    }
+    const [ x, y ] = getXY(e);
     g_points.push(new Point(x, y));
 }
 
@@ -29,34 +14,14 @@ function move(e) {
     if (!g_isDown)
         return;
 
-    let x, y;
-    if (e.touches) {
-        e = e.touches[0];
-        const rect = e.target.getBoundingClientRect();
-        x = e.pageX - rect.x;
-        y = e.pageY - rect.y;
-    }
-    else {
-        x = e.layerX;
-        y = e.layerY;
-    }
+    const [ x, y ] = getXY(e);
     g_points.push(new Point(x, y));
 }
 
 function stopGesture(e) {
     g_isDown = false;
 
-    let x, y;
-    if (e.touches) {
-        e = e.touches[0];
-        const rect = e.target.getBoundingClientRect();
-        x = e.pageX - rect.x;
-        y = e.pageY - rect.y;
-    }
-    else {
-        x = e.layerX;
-        y = e.layerY;
-    }
+    const [ x, y ] = getXY(e);
     g_points.push(new Point(x, y));
     chrome.runtime.sendMessage({
         points: g_points,
