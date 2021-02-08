@@ -135,7 +135,7 @@ function clearCanvas() {
 function save(e) {
     g_options.minScore = g_minScore.value;
 
-    chrome.storage.local.set(g_options);
+    browser.storage.local.set(g_options);
 }
 
-chrome.storage.local.get(null, init);
+browser.storage.local.get(null, init);
