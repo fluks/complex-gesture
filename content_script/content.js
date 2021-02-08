@@ -2,7 +2,6 @@ let g_isDown = false,
     g_points = [];
 
 function startGesture(e) {
-    e.preventDefault();
     g_isDown = true;
     g_points = [];
 
@@ -21,13 +20,7 @@ function move(e) {
 function stopGesture(e) {
     g_isDown = false;
 
-    const [ x, y ] = getXY(e);
-    g_points.push(new Point(x, y));
-    chrome.runtime.sendMessage({
-        points: g_points,
-        x: document.body.clientWidth,
-        y: document.body.clientHeight,
-    });
+    chrome.runtime.sendMessage({ points: g_points, });
 }
 
 function doAction(req, sender, sendMessage) {
