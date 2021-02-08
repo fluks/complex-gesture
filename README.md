@@ -1,6 +1,6 @@
 # Description
 
-Experimental single touch gesture browser extension.
+Experimental single touch gesture browser extension. My main focus is Fenix, that is Firefox on Android.
 
 Detection of gestures isn't really that reliable yet.
 
